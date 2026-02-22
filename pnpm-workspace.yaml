@@ -1,0 +1,10 @@
+packages:
+  - app
+  - e2e
+  - lib/*
+
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - '@upstash/qstash-cli'
+  - prisma
+  - sharp
