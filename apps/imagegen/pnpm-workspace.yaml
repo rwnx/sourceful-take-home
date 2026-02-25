@@ -1,13 +1,9 @@
-packages:
-  - apps/*
-  - lib/*
-  - tests/*
-
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver
 
 onlyBuiltDependencies:
   - '@prisma/engines'
   - '@upstash/qstash-cli'
   - esbuild
   - prisma
-  - sharp
-  - workerd

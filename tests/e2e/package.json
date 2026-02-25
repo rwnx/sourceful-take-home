@@ -1,0 +1,14 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "api.integration.test.mjs",
+  "scripts": {
+    "test": "node --test api.integration.test.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.1"
+}
