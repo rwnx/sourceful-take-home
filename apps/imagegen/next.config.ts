@@ -8,8 +8,6 @@ export const EnvSchema = z.looseObject({
   QSTASH_TOKEN: z.string(),
   QSTASH_CURRENT_SIGNING_KEY: z.string(),
   QSTASH_NEXT_SIGNING_KEY: z.string(),
-  CLIENT_ID: z.string(),
-  CLIENT_SECRET: z.string(),
   NEXT_PUBLIC_URL: z.url(),
   NEXT_PUBLIC_ORG_ID: z.string(),
   NEXT_PUBLIC_CLIENT_ID: z.string(),
