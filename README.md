@@ -46,7 +46,7 @@ flowchart TB
 
 ## Running Locally
 Set your Node version — I'm using [mise](https://mise.jdx.dev).
-See `mise.local.toml` and use this version if you're using a different version manager (e.g. nvm)
+See [mise.local.toml](./mise.local.toml) and use this version if you're using a different version manager (e.g. nvm)
 
 ```sh
 # Dependencies
