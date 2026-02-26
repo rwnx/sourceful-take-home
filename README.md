@@ -33,7 +33,6 @@ flowchart TB
     frontend --> create
     frontend --> latest
     frontend --> index
-    frontend <--> DB
     create --> DB
 
     create --> QS
