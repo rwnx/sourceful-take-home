@@ -20,4 +20,5 @@ pnpm dev                    # start app
 
 # Deploy
 pnpm vercel deploy --prod  # requires .env.production
+pnpm db migrate deploy
 ```
