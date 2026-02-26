@@ -16,6 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>ImageGen</title>
+      </head>
       <body className={`${spaceGrotesk.variable} antialiased`}>
         <AppProviders>{children}</AppProviders>
       </body>
