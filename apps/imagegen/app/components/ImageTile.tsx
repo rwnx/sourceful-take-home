@@ -1,7 +1,6 @@
 import { CrossCircledIcon } from "@radix-ui/react-icons"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import { Card, Flex, Badge, Spinner, Inset, Text } from "@radix-ui/themes"
-import { useState } from "react"
 import { Generation } from "../lib/schema/api"
 
 export const ImageErrorTile: React.FC<{ message: string; tooltip?: string }> = ({
@@ -67,7 +66,6 @@ export const ImageErrorTile: React.FC<{ message: string; tooltip?: string }> = (
 }
 
 export const ImageTile: React.FC<{ generation: Generation }> = ({ generation: item }) => {
-  const [hasImageError, setHasImageError] = useState(false)
   const generationErrorReason = item.error?.trim() || "No failure reason provided."
 
   if (item.status === "PENDING") {
@@ -94,18 +92,16 @@ export const ImageTile: React.FC<{ generation: Generation }> = ({ generation: it
   }
 
   if (item.status === "SUCCESS") {
-    if (hasImageError) {
-      return <ImageErrorTile message="Image failed to load" />
-    }
 
     return (
       <Card size="1" style={{ overflow: "hidden" }}>
         <Inset>
           <img
             src={item.result}
-            alt="Generated image"
+            title={"Generated Image"}
+            data-jobid={item.jobId}
+            alt="Generated Image"
             style={{ display: "block", width: "100%", objectFit: "cover" }}
-            onError={() => setHasImageError(true)}
           />
         </Inset>
       </Card>

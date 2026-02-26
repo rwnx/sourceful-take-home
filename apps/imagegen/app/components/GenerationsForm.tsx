@@ -7,8 +7,11 @@ import { useForm, Controller } from "react-hook-form"
 import z from "zod"
 import { AnimalSchema, Animals } from "@/app/lib/schema/api"
 
+const MIN_IMAGES = 1
+const MAX_IMAGES = 5
+
 const FormSchema = z.object({
-  numImages: z.coerce.number(),
+  numImages: z.number().min(MIN_IMAGES).max(MAX_IMAGES),
   animal: AnimalSchema,
 })
 
@@ -18,16 +21,13 @@ type PromptFormProps = {
   mutation: UseMutationResult<unknown, unknown, FormData>
 }
 
-const MIN_IMAGES = 1
-const MAX_IMAGES = 5
-
 const PromptForm: React.FC<PromptFormProps> = ({ mutation }) => {
   const {
     handleSubmit,
     control,
     watch,
     formState: { isSubmitting },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       numImages: MIN_IMAGES,
