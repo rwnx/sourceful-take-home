@@ -3,7 +3,7 @@
 ![ImageGen app](./docs/app.png)
 
 
-* [Original brief](./BRIEF.md)
+* [Original brief](./BRIEF.pdf)
 * [Planning Documentation](./PLANNING.md)
 
 ## Architecture
