@@ -1,25 +1,46 @@
 # Sourceful Take Home Project
 
-* Original brief
-* [Planning Documentation](./PLANNING.md)
-
-## App Screenshots
 ![ImageGen app](./docs/app.png)
 
-### QStash Local Mode
-![QStash local mode console](./docs/qstash-local-mode.png)
+
+* [Original brief](./BRIEF.md)
+* [Planning Documentation](./PLANNING.md)
 
 ## Architecture
 ```mermaid
-flowchart LR
-  U["User Browser"] --> V["Vercel-hosted Next.js app"]
-  V --> A["API route: create generation"]
-  A --> D["Prisma Data Platform (Postgres)"]
-  A --> Q["QStash queue"]
-  Q --> O["OpenAI HTTP service"]
-  O --> C["Callback endpoint (/api/worker/:providerId/:id)"]
-  C --> D
-  D --> V
+flowchart TB
+    SlashID["👤 Auth(SlashID)"]
+    subgraph App["Next.js (Vercel)"]
+        frontend["🌐 Frontend"]
+        subgraph api["api"]
+            create["➕ POST /api/generations"]
+            index["🗃️ GET /api/generations"]
+            latest["⏰ GET /api/generations/latest"]
+            callback["↩️ POST /api/worker/:providerId/:id"]
+        end
+    end
+
+    DB["Database (postgres)"]
+    subgraph qstash["Qstash"]
+        QS["Qstash"]
+        QSCallback["Qstash Callback"]
+        DLQ["Dead-Letter Queue"]
+    end
+
+    OAI["🤖 OpenAI HTTP API"]
+    frontend <--> SlashID
+    frontend --> create
+    frontend --> latest
+    frontend --> index
+    frontend <--> DB
+    create --> DB
+
+    create --> QS
+    QS --> OAI
+    QS --> DLQ
+    OAI --> QSCallback
+    QSCallback --> callback
+    callback --> DB
 ```
 
 
@@ -46,19 +67,15 @@ pnpm dev                    # start app
 ### OpenAI Mock vs Real API
 By default, local development is set up to use the mock OpenAI HTTP service (`pnpm mock-openai-service`).
 
-To use your own OpenAI API key/provider instead, override these values in your app `.env` file:
+To use your own OpenAI API key instead, override these values in your app `.env` file:
 
 ```env
 OPENAI_API_KEY=your_api_key_here
-OPENAI_API_URL=your_provider_base_url_here
-```
-
-Example (official OpenAI endpoint):
-```env
 OPENAI_API_URL=https://api.openai.com/v1
 ```
 
 ### Monitoring & Debugging
+![QStash local mode console](./docs/qstash-local-mode.png)
 * [QStash Local Monitoring & Logs](https://console.upstash.com/qstash/local-mode-user)
 
 
