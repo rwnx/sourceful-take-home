@@ -64,14 +64,15 @@ pnpm dev                    # start app
 
 ```
 
-### OpenAI Mock vs Real API
+### Local Environment config
 By default, local development is set up to use the mock OpenAI HTTP service (`pnpm mock-openai-service`).
 
-To use your own OpenAI API key instead, override these values in your app `.env` file:
+To use your own OpenAI API key instead, override these values in your app `.env.local` file:
 
-```env
+```sh
+# Real OpenAI Service
+OPENAI_API_URL=https://api.openai.com
 OPENAI_API_KEY=your_api_key_here
-OPENAI_API_URL=https://api.openai.com/v1
 ```
 
 ### Monitoring & Debugging
