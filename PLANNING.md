@@ -1,5 +1,5 @@
 # Requirements
-I translated the brief into user stories for clarity.
+I translated the brief into user stories to explain my working process and what I understood.
 
 ## As a User
 * ✅ I want to select an animal from a dropdown, so that I can specify what type of animal to generate
@@ -13,7 +13,7 @@ I translated the brief into user stories for clarity.
 ## As an Interviewer
 * ✅ I want to see a comprehensive README.md, so that I can run the project locally without asking the original developer
 * ✅ I want to see a method of changing the image generation provider, so that I understand the developer is considering vendor lifecycle while developing
-* ⁉️ I want to see the service deployed on a real environment, so that I understand the developer has experience in cloud environments (not fully documented yet)
+* ✅ I want to see the service deployed on a real environment, so that I understand the developer has experience in cloud environments 
 * ✅ I want to see some tests, so that I understand the developer has experience testing
 * ✅ I want to see error handling, so that I understand the developer has experience building robust services
 * ❌ I want to see styling that matches Sourceful's branding, so that I can evaluate the developer's attention to design requirements and ability to implement brand guidelines
@@ -22,9 +22,9 @@ I translated the brief into user stories for clarity.
 - Deployment Platform: Vercel
 - Image Generation Provider: OpenAI HTTP API via QStash callback flow
 - Async Processing / Queue: QStash (retries, DLQ, callback support for serverless limits)
-- Image Storage: currently database-backed, should move to CDN/object storage
+- Image Storage: currently database-backed, should move to CDN/object storage to leverage browser caching
 - Authentication: added to protect real API keys on public endpoints
-- Rate Limiting: not implemented (possible via QStash/API layer)
+- Rate Limiting: ❌ not implemented (possible via QStash/API layer)
 - Provider Failures: stored in DB `error` field
 
 ## Other Decisions

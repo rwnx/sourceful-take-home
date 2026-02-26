@@ -7,6 +7,7 @@ const GenerationsStatus = z.enum(["PENDING", "SUCCESS", "ERROR"])
 
 export enum Animals {
   Wolf = "wolf",
+  Crow = "crow",
   Cat = "cat",
   Chicken = "chicken",
   Deer = "deer",
@@ -17,7 +18,8 @@ export enum Animals {
   Tiger = "tiger",
   Turkey = "turkey",
   Pangolin = "pangolin",
-  Frog = "frog"
+  Frog = "frog",
+  Robot = "robot",
 }
 
 export const AnimalSchema = z.enum(Animals)
