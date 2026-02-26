@@ -79,6 +79,9 @@ OPENAI_API_KEY=your_api_key_here
 ![QStash local mode console](./docs/qstash-local-mode.png)
 * [QStash Local Monitoring & Logs](https://console.upstash.com/qstash/local-mode-user)
 
+## E2E Testing
+There's a basic smoke test to test the image generation on a local environment.
+See [./tests/e2e/README.md](./tests/e2e/README.md)
 
 ## deployment
 * DB: [Prisma Data Platform](https://console.prisma.io/cmlxyzpza03z43xfkczx2pebd/cmlxz087m03zj3xfk59ynmhw6/cmlxz087m03zh3xfk4crkq52z/dashboard)
