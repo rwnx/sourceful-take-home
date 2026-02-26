@@ -12,11 +12,13 @@ const OpenAIImageGenResponseSchema = z.object({
   ),
 })
 
+
 export const openaiProvider: ImageGenerationProvider = {
   name: "openai",
   getRequest(params) {
+    const url = `${process.env.OPENAI_API_URL}/v1/images/generations`
     return {
-      url: "https://api.openai.com/v1/images/generations",
+      url,
       headers: {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json",

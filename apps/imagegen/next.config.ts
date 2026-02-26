@@ -4,6 +4,7 @@ import z from "zod";
 export const EnvSchema = z.looseObject({
   DATABASE_URL: z.url(),
   OPENAI_API_KEY: z.string(),
+  OPENAI_API_URL: z.url().optional(),
   QSTASH_URL: z.url(),
   QSTASH_TOKEN: z.string(),
   QSTASH_CURRENT_SIGNING_KEY: z.string(),

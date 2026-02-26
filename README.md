@@ -12,13 +12,14 @@ See `mise.local.toml` and use this version if you're using a different version m
 # Dependencies
 pnpm i
 docker compose up -d        # start db
+mock-openai-service         # Start openai API mock
+pnpm qstash dev             # start qstash for local testing
 
 cd apps/imagegen
 
 # Dev services (run separately so you can manage them independently)
 pnpm db migrate dev         # migrate dev db
 pnpm db studio              # db studio at http://localhost:51212 (optional)
-pnpm qstash dev             # start qstash for local testing
 pnpm dev                    # start app
 
 ```

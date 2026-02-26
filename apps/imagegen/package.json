@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3005",
     "postinstall": "prisma generate",
     "db": "prisma",
     "build": "next build",
@@ -46,7 +46,6 @@
     "prisma": "^7.4.1",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vercel": "^50.23.2",
-    "@upstash/qstash-cli": "^2.32.32"
+    "vercel": "^50.23.2"
   }
 }
