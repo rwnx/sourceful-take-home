@@ -4,6 +4,7 @@ import { GenerationsGetLatestResponse } from "@/app/lib/schema/api"
 import { NextRequest, NextResponse } from "next/server"
 import dayjs, { Dayjs } from "dayjs"
 
+/** Get the most-recent update or image creation, which can be used as a cache key for detecting image updates */
 export async function GET(req: NextRequest): Promise<NextResponse<GenerationsGetLatestResponse>> {
   requireAuthContext(req)
 

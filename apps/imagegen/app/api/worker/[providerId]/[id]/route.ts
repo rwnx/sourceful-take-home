@@ -4,9 +4,12 @@ import prisma from '@/app/lib/prisma'
 import { getImageGenerationProvider, ProviderNameSchema } from '@/app/lib/providers'
 import { parseQStashCallbackPayload } from '@/app/lib/queue/qstash/callback'
 
-const NotRetryable = (id: string) => NextResponse.json({ ok: false, id }, {status: 489, headers: {"Upstash-NonRetryable-Error": "true"}})
+/** This response sends the message to the DLQ
+ * See https://upstash.com/docs/qstash/features/retry
+ */
+const NotRetryableResponse = (id: string) => NextResponse.json({ ok: false, id }, {status: 489, headers: {"Upstash-NonRetryable-Error": "true"}})
 
-async function handler(req: Request, ctx: RouteContext<'/api/worker/[providerId]/[id]'>) {
+export async function POST(req: Request, ctx: RouteContext<'/api/worker/[providerId]/[id]'>) {
   const { id, providerId } = await ctx.params
   if (!id) {
     throw new Error("missing id")
@@ -15,8 +18,7 @@ async function handler(req: Request, ctx: RouteContext<'/api/worker/[providerId]
   const parsedProvider = ProviderNameSchema.safeParse(providerId)
   if (!parsedProvider.success) {
     console.error(`[/api/worker/${parsedProvider}/${id}] UNKNOWN PROVIDER`)
-    // send message to dlq - not compatible with this app but could contain important data for retry
-    return NotRetryable(id)
+    return NotRetryableResponse(id)
   }
 
   const provider = getImageGenerationProvider(parsedProvider.data)
@@ -31,7 +33,7 @@ async function handler(req: Request, ctx: RouteContext<'/api/worker/[providerId]
       where: { id },
       data: { status: 'ERROR', error: 'Malformed qstash callback payload' },
     })
-    return NotRetryable(id)
+    return NotRetryableResponse(id)
   }
 
   const upstreamBody = callback.upstreamBody
@@ -44,7 +46,7 @@ async function handler(req: Request, ctx: RouteContext<'/api/worker/[providerId]
       where: { id },
       data: { status: 'ERROR', error: `${provider.name.toUpperCase()}: ${callback.status}: ${upstreamBody}` },
     })
-    return NotRetryable(id)
+    return NotRetryableResponse(id)
   }
 
   const parsedResult = provider.parseQStashCallbackBody(upstreamBody)
@@ -55,7 +57,7 @@ async function handler(req: Request, ctx: RouteContext<'/api/worker/[providerId]
       where: { id },
       data: { status: 'ERROR', error: parsedResult.error },
     })
-    return NotRetryable(id)
+    return NotRetryableResponse(id)
   }
 
   await prisma.image.update({
@@ -66,5 +68,3 @@ async function handler(req: Request, ctx: RouteContext<'/api/worker/[providerId]
 
   return NextResponse.json({ ok: true, id })
 }
-
-export const POST = verifySignatureAppRouter(handler)
