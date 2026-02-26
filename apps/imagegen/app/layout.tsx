@@ -1,16 +1,11 @@
-import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
+import { Space_Grotesk } from "next/font/google"
 import "@radix-ui/themes/styles.css"
 import "@slashid/react/style.css"
+import "./globals.css"
 import AppProviders from "@/app/components/AppProviders"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
 })
 
@@ -21,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${spaceGrotesk.variable} antialiased`}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

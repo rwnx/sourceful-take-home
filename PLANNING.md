@@ -16,7 +16,7 @@ I translated the brief into user stories to explain my working process and what 
 * ✅ I want to see the service deployed on a real environment, so that I understand the developer has experience in cloud environments 
 * ✅ I want to see some tests, so that I understand the developer has experience testing
 * ✅ I want to see error handling, so that I understand the developer has experience building robust services
-* ❌ I want to see styling that matches Sourceful's branding, so that I can evaluate the developer's attention to design requirements and ability to implement brand guidelines
+* ✅ I want to see styling that matches Sourceful's branding, so that I can evaluate the developer's attention to design requirements and ability to implement brand guidelines
 
 # Considerations
 - Deployment Platform: Vercel

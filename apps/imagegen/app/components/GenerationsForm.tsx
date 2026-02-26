@@ -1,4 +1,5 @@
 "use client"
+import { StarIcon } from "@radix-ui/react-icons"
 import { Heading, Separator, Flex, Select, Button, Text } from "@radix-ui/themes"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UseMutationResult } from "@tanstack/react-query"
@@ -17,15 +18,19 @@ type PromptFormProps = {
   mutation: UseMutationResult<unknown, unknown, FormData>
 }
 
+const MIN_IMAGES = 1
+const MAX_IMAGES = 5
+
 const PromptForm: React.FC<PromptFormProps> = ({ mutation }) => {
   const {
     handleSubmit,
     control,
+    watch,
     formState: { isSubmitting },
   } = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      numImages: "1",
+      numImages: MIN_IMAGES,
       animal: Animals.Wolf,
     },
   })
@@ -33,6 +38,9 @@ const PromptForm: React.FC<PromptFormProps> = ({ mutation }) => {
   const onSubmit = async (data: FormData) => {
     await mutation.mutateAsync(data)
   }
+
+  const numImages = watch("numImages")
+  const labelStyle = { color: "rgb(41, 41, 41)", fontSize: "13px" }
 
   return (
     <Flex
@@ -53,36 +61,42 @@ const PromptForm: React.FC<PromptFormProps> = ({ mutation }) => {
 
         <Separator size="4" />
 
-        {/* Number of Images */}
         <Flex direction="column" gap="1">
-          <Text as="label" size="2" weight="medium" htmlFor="num-images">
-            Number of Images
-          </Text>
+          <Flex align="center" justify="between">
+            <Text as="label" weight="medium" htmlFor="num-images" style={labelStyle}>
+              Number of Images
+            </Text>
+            <Controller
+              name="numImages"
+              control={control}
+              render={({ field }) => (
+                <Text size="2" weight="bold" style={{ color: "var(--brand-accent)" }}>
+                  {field.value}
+                </Text>
+              )}
+            />
+          </Flex>
           <Controller
             name="numImages"
             control={control}
             render={({ field }) => (
-              <Select.Root
+              <input
+                id="num-images"
+                type="range"
+                min={MIN_IMAGES}
+                max={MAX_IMAGES}
+                step={1}
                 disabled={isSubmitting}
-                value={String(field.value)}
-                onValueChange={field.onChange}
-              >
-                <Select.Trigger id="num-images" style={{ width: "100%" }} />
-                <Select.Content>
-                  {["1", "2", "3", "4", "5"].map((n) => (
-                    <Select.Item key={n} value={n}>
-                      {n}
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Root>
+                value={field.value}
+                onChange={(event) => field.onChange(Number(event.target.value))}
+                style={{ width: "100%", accentColor: "var(--brand-accent)", cursor: "pointer" }}
+              />
             )}
           />
         </Flex>
 
-        {/* Animal */}
         <Flex direction="column" gap="1">
-          <Text as="label" size="2" weight="medium" htmlFor="animal">
+          <Text as="label" weight="medium" htmlFor="animal" style={labelStyle}>
             Animal
           </Text>
           <Controller
@@ -123,7 +137,10 @@ const PromptForm: React.FC<PromptFormProps> = ({ mutation }) => {
           disabled={isSubmitting}
           loading={isSubmitting}
         >
-          Generate
+          <Flex align="center" gap="2">
+            <StarIcon width={14} height={14} aria-hidden />
+            <Text>{`Generate ${numImages} images`}</Text>
+          </Flex>
         </Button>
       </form>
     </Flex>
