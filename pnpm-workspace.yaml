@@ -3,11 +3,11 @@ packages:
   - lib/*
   - tests/*
 
-
 onlyBuiltDependencies:
   - '@prisma/engines'
   - '@upstash/qstash-cli'
   - esbuild
+  - msw
   - prisma
   - sharp
   - workerd
