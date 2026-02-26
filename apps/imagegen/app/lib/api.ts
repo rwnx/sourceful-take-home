@@ -11,7 +11,7 @@ class PublicApi {
   private client: Axios
   constructor() {
     this.client = axios.create({
-      baseURL: `${process.env.NEXT_PUBLIC_URL}/api`,
+      baseURL: `/api`,
       headers: {
         Accept: "application/json"
       }
