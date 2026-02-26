@@ -18,20 +18,22 @@ I translated the brief into user stories to explain my working process and what 
 * ✅ I want to see error handling, so that I understand the developer has experience building robust services
 * ✅ I want to see styling that matches Sourceful's branding, so that I can evaluate the developer's attention to design requirements and ability to implement brand guidelines
 
-# Considerations
+# Notes
 - Deployment Platform: Vercel
 - Image Generation Provider: OpenAI HTTP API via QStash callback flow
-- Async Processing / Queue: QStash (retries, DLQ, callback support for serverless limits)
-- Image Storage: currently database-backed, should move to CDN/object storage to leverage browser caching
+    - Swappable with any HTTP API that returns image data
+- Async Processing / Worker Process: QStash (retries, DLQ, callback support for serverless function execution timeouts)
+- Image Storage: uploads to Vercel Blob to take advantage of caching
 - Authentication: added to protect real API keys on public endpoints
 - Rate Limiting: ❌ not implemented (possible via QStash/API layer)
-- Provider Failures: stored in DB `error` field
+- Provider Failures: stored in DB `error` field and displayed in tooltip
+- Database: Postgres (local via Docker, remote via Prisma)
+- Infinite scroll: TanStack Query `useInfiniteQuery` & pagination query params /get/generations?offset=0&pageSize=
 
 ## Other Decisions
 - Frontend state management: TanStack Query caching
-- Infinite scroll: TanStack Query `useInfiniteQuery`
 - Styling/UI: Radix UI + Tailwind
 
 ## Assumptions
 - Hardcoded list of animals
-- Database: Postgres (local via Docker, remote via Prisma)
+

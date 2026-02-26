@@ -21,6 +21,7 @@
     "@slashid/slashid": "^3.29.6",
     "@tanstack/react-query": "^5.90.21",
     "@upstash/qstash": "^2.9.0",
+    "@vercel/blob": "^2.3.0",
     "axios": "^1.13.5",
     "dayjs": "^1.11.19",
     "dotenv": "^17.3.1",

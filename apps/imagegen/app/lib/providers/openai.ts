@@ -1,21 +1,20 @@
 import z from "zod"
-import { ImageGenerationProvider } from "./provider-types"
+import { ImageGenerationProvider, ProviderFileType, ProviderRequestParams } from "./provider-types"
 
-const OpenAIImageGenResponseSchema = z.object({
+const OpenAIImageGenResponseSchema = z.looseObject({
   created: z.number(),
   data: z.array(
-    z.object({
-      url: z.url().optional(),
-      b64_json: z.string().optional(),
-      revised_prompt: z.string().optional(),
+    z.looseObject({
+      b64_json: z.string(),
     })
   ),
 })
 
+/** https://developers.openai.com/api/reference/resources/images/methods/generate */
+export class OpenAIProvider implements ImageGenerationProvider {
+  readonly name = "openai"
 
-export const openaiProvider: ImageGenerationProvider = {
-  name: "openai",
-  getRequest(params) {
+  getRequest(params: ProviderRequestParams) {
     const url = `${process.env.OPENAI_API_URL}/v1/images/generations`
     return {
       url,
@@ -29,31 +28,24 @@ export const openaiProvider: ImageGenerationProvider = {
         n: 1,
         quality: "low",
         size: "1024x1024",
-        output_format: "jpeg"
+        output_format: "jpeg",
       },
     }
-  },
-  parseQStashCallbackBody(upstreamBody) {
+  }
+
+  parseCallbackBody(upstreamBody: string) {
     try {
       const payload = JSON.parse(upstreamBody)
       const parsed = OpenAIImageGenResponseSchema.safeParse(payload)
       if (!parsed.success) {
-        return { ok: false, error: "Unexpected OpenAI response shape" }
+        return { error: "Unexpected OpenAI response shape" }
       }
 
-      const imageB64 = parsed.data.data[0]?.b64_json
-      const imageUrl = parsed.data.data[0]?.url
-      if (!imageB64 && !imageUrl) {
-        return { ok: false, error: "No image returned by OpenAI" }
-      }
-
-      if (imageB64) {
-        return { ok: true, result: `data:image/jpeg;base64,${imageB64}` }
-      }
-
-      return { ok: true, result: imageUrl! }
+      return { data: parsed.data.data[0].b64_json, filetype: ProviderFileType.JPEG }
     } catch {
-      return { ok: false, error: "Failed to parse OpenAI callback body" }
+      return { error: "Failed to parse OpenAI callback body" }
     }
-  },
+  }
 }
+
+export const openaiProvider = new OpenAIProvider()

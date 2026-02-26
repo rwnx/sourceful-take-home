@@ -47,6 +47,9 @@ importers:
       '@upstash/qstash':
         specifier: ^2.9.0
         version: 2.9.0
+      '@vercel/blob':
+        specifier: ^2.3.0
+        version: 2.3.0
       axios:
         specifier: ^1.13.5
         version: 1.13.5

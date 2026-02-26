@@ -13,7 +13,6 @@ export enum Animals {
   Deer = "deer",
   Hedgehog = "hedgehog",
   Owl = "owl",
-  Warthog = "warthog",
   Pig = "pig",
   Tiger = "tiger",
   Turkey = "turkey",

@@ -74,6 +74,9 @@ To use your own OpenAI API key instead, override these values in your app `.env.
 # Real OpenAI Service
 OPENAI_API_URL=https://api.openai.com
 OPENAI_API_KEY=your_api_key_here
+
+# We need a vercel blob store for images
+BLOB_READ_WRITE_TOKEN="your_api_key_here"
 ```
 
 ### Monitoring & Debugging

@@ -1,7 +1,8 @@
 import { verifySignatureAppRouter } from '@upstash/qstash/nextjs'
+import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server'
 import prisma from '@/app/lib/prisma'
-import { getImageGenerationProvider, ProviderNameSchema } from '@/app/lib/providers'
+import { getImageGenerationProvider, ProviderFileType, ProviderNameSchema } from '@/app/lib/providers'
 import { parseQStashCallbackPayload } from '@/app/lib/queue/qstash/callback'
 
 /** This response sends the message to the DLQ
@@ -9,7 +10,18 @@ import { parseQStashCallbackPayload } from '@/app/lib/queue/qstash/callback'
  */
 const NotRetryableResponse = (id: string) => NextResponse.json({ ok: false, id }, {status: 489, headers: {"Upstash-NonRetryable-Error": "true"}})
 
-export async function POST(req: Request, ctx: RouteContext<'/api/worker/[providerId]/[id]'>) {
+const extensions: Record<ProviderFileType, string> = {
+  [ProviderFileType.JPEG]: "jpg"
+}
+const dataUrlPrefix: Record<ProviderFileType, string> = {
+  [ProviderFileType.JPEG]: "data:image/jpeg;base64,"
+}
+const getFileExtension = (filetype: ProviderFileType) => {
+  return extensions[filetype]
+}
+const getDataUrl = (filetype: ProviderFileType, data: string) => dataUrlPrefix[filetype] + data
+
+async function handler(req: Request, ctx: RouteContext<'/api/worker/[providerId]/[id]'>) {
   const { id, providerId } = await ctx.params
   if (!id) {
     throw new Error("missing id")
@@ -49,22 +61,28 @@ export async function POST(req: Request, ctx: RouteContext<'/api/worker/[provide
     return NotRetryableResponse(id)
   }
 
-  const parsedResult = provider.parseQStashCallbackBody(upstreamBody)
-  if (!parsedResult.ok) {
+  const callbackBody = provider.parseCallbackBody(upstreamBody)
+  if (callbackBody.error !== undefined) {
     console.error(`[/api/worker/${provider.name}/${id}] INVALID PROVIDER BODY`)
 
     await prisma.image.update({
       where: { id },
-      data: { status: 'ERROR', error: parsedResult.error },
+      data: { status: 'ERROR', error: callbackBody.error },
     })
     return NotRetryableResponse(id)
   }
 
+  const extension = getFileExtension(callbackBody.filetype)
+  const putResult = await put(`images/${id}.${extension}`, Buffer.from(callbackBody.data, "base64"), {access: "public"})
+  const url = putResult.url;
+
   await prisma.image.update({
     where: { id },
-    data: { status: 'SUCCESS', result: parsedResult.result },
+    data: { status: 'SUCCESS', result: url },
   })
-  console.error(`[/api/worker/${provider.name}/${id}] SUCCESS`)
+  console.info(`[/api/worker/${provider.name}/${id}] SUCCESS`)
 
   return NextResponse.json({ ok: true, id })
 }
+
+export const POST = verifySignatureAppRouter(handler)
