@@ -25,8 +25,9 @@ export const openaiProvider: ImageGenerationProvider = {
       },
       body: {
         prompt: params.prompt,
-        model: "gpt-image-1",
+        model: "gpt-image-1-mini",
         n: 1,
+        quality: "low",
         size: "1024x1024",
         output_format: "jpeg"
       },

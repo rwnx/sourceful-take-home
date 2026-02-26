@@ -3,6 +3,7 @@
 ![ImageGen app](./docs/app.png)
 
 * Production URL: [https://imagegen.rwnx.dev](https://imagegen.rwnx.dev)
+    * You should be able to sign up with `*@sourceful.com` email addresses
 * [Original brief](./BRIEF.pdf)
 * [Planning Documentation](./PLANNING.md)
 
