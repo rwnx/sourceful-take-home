@@ -21,9 +21,12 @@ if (parsedEnv.error) {
   process.exit(1)
 }
 
+// Although we parse the env here, the output type is always string if required and string|undefined if optional
+type ParsedProcessEnv = { [K in keyof z.infer<typeof EnvSchema>]: undefined extends z.infer<typeof EnvSchema>[K] ? string | undefined : string }
+
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends z.infer<typeof EnvSchema> { }
+    interface ProcessEnv extends ParsedProcessEnv {}
   }
 }
 
